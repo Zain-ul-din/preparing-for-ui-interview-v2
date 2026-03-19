@@ -1,7 +1,18 @@
 // bun test src/problems/02-debounce/test/debounce.test.ts
 
-export function debounce() {
+export function debounce<T extends (...args: never[]) => void, This>(
+  fn: T,
+  delay: number,
+): (...args: Parameters<T>) => void {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
 
+  return function (this: This, ...args: Parameters<T>) {
+    if (timeoutId !== null) clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => {
+      fn.apply(this, args)
+      timeoutId = null
+    }, delay)
+  }
 }
 
 // --- Examples ---

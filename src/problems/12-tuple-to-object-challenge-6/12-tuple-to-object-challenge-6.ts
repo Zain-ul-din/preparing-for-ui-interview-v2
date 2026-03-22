@@ -13,7 +13,6 @@
 import type { Equal, Expect } from '@course/types'
 
 /* _____________ Your Code Here _____________ */
-
 type TupleToObject<T extends readonly any[]> = {
   [Key in T[number]]: Key
 }

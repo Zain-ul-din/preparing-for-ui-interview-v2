@@ -26,4 +26,8 @@ interface Todo {
   description: string
 }
 
+type MyReadonly<T extends object> = {
+  readonly [K in keyof T]: T[K]
+}
+
 type cases = [Expect<Equal<MyReadonly<Todo>, Readonly<Todo>>>]

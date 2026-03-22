@@ -1,9 +1,25 @@
 // bun test src/problems/09-deep-equals/test/deep-equals.test.ts
-
 import { detectType } from '@course/utils'
 
 export function deepEquals(a: any, b: any, cache = new Map()): boolean {
+  if (a === b || (cache.has(a) && cache.get(a) === b)) return true
+  const [typeA, typeB] = [detectType(a), detectType(b)]
+  if (typeA !== typeB) return false
 
+  // primitive types
+  if (typeof a !== 'object' || typeof b !== 'object') return a === b
+
+  // handle object cases
+  const [keysA, keysB] = [new Set(Object.keys(a)), new Set(Object.keys(b))]
+  // check if keys are different
+  if (keysA.symmetricDifference(keysB).size > 0) return false
+
+  cache.set(a, b)
+  for (const key of keysA) {
+    if (!deepEquals(a[key], b[key], cache)) return false
+  }
+
+  return true
 }
 
 // --- Examples ---
